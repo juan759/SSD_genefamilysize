@@ -26,4 +26,5 @@ The script accepts two parameters, one optional and one required:
 --ortho-tree: A tree file (in the "tre" format) specifying the tree to be utilized in the processing.
 # Usage Examples:
 python3 orthofinder_better_optimized.py --url-list name.txt 
+
 python3 orthofinder_better_optimized.py –url-list name.txt –ortho-three Mammalia_tree_130spp_plosOne_timetree_addedTips.tre
