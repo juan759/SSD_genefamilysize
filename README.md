@@ -1,6 +1,6 @@
 # Gene Family Size Pipeline.
 ## Introduction
-This project encompasses a comprehensive pipeline designed to facilitate the creation process of . It involves providing a list of URLs to download genomes from NCBI and subsequently generate family trees .
+This project encompasses a comprehensive pipeline designed to facilitate the creation process of obtaining the size of family genes. It involves providing a list of URLs to download genomes from NCBI and subsequently generate family trees and process genes.
 ## Installation
 ### Local
 Clone the repository to your machine and start using the project. Ensure the system has python>=3.9.x.
