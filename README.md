@@ -3,7 +3,7 @@
 This project encompasses a comprehensive pipeline designed to facilitate the creation process of obtaining the size of family genes. It involves providing a list of URLs to download genomes from NCBI and subsequently generate family trees and process genes.
 ## Installation
 ### Local
-Clone the repository to your machine and start using the project. Ensure the system has python>=3.9.x.
+Clone the repository to your machine and start using the project, the main function is located at "SSD_genefamilysize.py". Ensure the system has python>=3.9.x.
 
 The tools necessary for the pipeline to run smoothly are samtools, awk, grep, curl, gzip and the project Orthofinder. 
 
@@ -27,9 +27,10 @@ Run the Python script. If any required flags or parameters are missing, the scri
 The script accepts two parameters, one optional and one required:
 
 --url-list: A text file containing URLs, each separated by a newline, from which genomes will be downloaded from NCBI.
+
 --ortho-tree: A tree file (in the "tre" format) specifying the tree to be utilized in the processing.
 
 # Usage Examples:
-python3 orthofinder_better_optimized.py --url-list name.txt 
+python3 SSD_genefamilysize.py --url-list name.txt 
 
-python3 orthofinder_better_optimized.py –url-list name.txt –ortho-three Mammalia_tree_130spp_plosOne_timetree_addedTips.tre
+python3 SSD_genefamilysize.py –url-list name.txt –ortho-three Mammalia_tree_130spp_plosOne_timetree_addedTips.tre
