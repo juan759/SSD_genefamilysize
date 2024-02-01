@@ -12,18 +12,23 @@ NOTE:Using this installation method you might need to change the working directo
 Alternatively you can clone the repository, and use the Dockerfile attached to build an image and use the project inside that image.
 
 For this you will need to first create an image with the docker file:
-sudo docker build -t orthofinder .
 
-then after the image has been created over the dockerfile you can spawn an interactive tty shell with /bin/bash. This is possible  because the Docker image works on an Ubuntu Image.
+sudo docker build -t orthofinder
+
+then after the image has been created over the dockerfile you can spawn an interactive tty shell with /bin/bash. This is possible  because the Docker image works on an Ubuntu Image:
+
 sudo docker run –name Orthofind --interactive --tty orthofind /bin/bash
 
 this will spawn a new shell and you will be able to find the files for the project in the /home/orthofinder repository.
-Usage
-Run the Python script. If any required flags or parameters are missing, the script will print the usage and examples. While running the script will print the stage it is and the process it is currently running.
+
+## Usage
+Run the Python script. If any required flags or parameters are missing, the script will print the usage and examples. While running, the script will print the stage it currently is and the process it is currently running.
 
 The script accepts two parameters, one optional and one required:
+
 --url-list: A text file containing URLs, each separated by a newline, from which genomes will be downloaded from NCBI.
 --ortho-tree: A tree file (in the "tre" format) specifying the tree to be utilized in the processing.
+
 # Usage Examples:
 python3 orthofinder_better_optimized.py --url-list name.txt 
 
