@@ -4,6 +4,7 @@ import subprocess
 import urllib.request
 import os
 import logger as logort
+import cleaner as cl
 
 def usage():
     print("[+]Como usarlo: python3 Orthofinder_better.py --url-list <URL_LIST_FILE> --ortho-three <PATH_to_tree>")
@@ -147,6 +148,7 @@ def grep_and_awk(downloaded):
         escaped_n = "\n".encode('unicode_escape').decode("utf-8")
         for k in downloaded:
             subprocess.run(f"awk 'ORS=NR%4?\" \":\"{escaped_n}\"' {k}_{i}.txt > {k}_df.txt", shell=True, executable="/bin/bash")
+    cl.clean_step5()
 
 def extract_indices(downloaded):
     """
@@ -170,6 +172,9 @@ def extract_indices(downloaded):
     escaped_t = "\t".encode('unicode_escape').decode("utf-8")
     for i in downloaded:
         subprocess.run(f"awk -v OFS='{escaped_t}' '$1=$1' genome_index_geneID.txt > genome_index_geneID_tab.txt", shell=True, executable="/bin/bash")
+    
+    #Clean unnecesary files for further steps.
+    cl.clean_genomeID()
 
 def run_r_script(downloaded):
     """
@@ -223,22 +228,22 @@ def main(url_list, tree):
     downloaded = pasos_samtools(downloaded)
     logort.logging("Se terminó de aplicar samtools a los archivos renombrados.")
 
-    # Función que aplica grep y awk a los archivos renombrados para obtener indices de genes relevantes.
-    grep_and_awk(downloaded)
-    logort.logging("Se terminó de aplicar grep y awk a los archivos...")
+    # # Función que aplica grep y awk a los archivos renombrados para obtener indices de genes relevantes.
+    # grep_and_awk(downloaded)
+    # logort.logging("Se terminó de aplicar grep y awk a los archivos...")
 
-    #Función que aplica grep y awk de nuevo para obtener indices relevantes.
-    extract_indices(downloaded)
-    logort.logging("Se obtuvieron los índices necesarios, continuando...")
+    # #Función que aplica grep y awk de nuevo para obtener indices relevantes.
+    # extract_indices(downloaded)
+    # logort.logging("Se obtuvieron los índices necesarios, continuando...")
 
-    #Se termina de ejecutar el archivo de R.
-    run_r_script(downloaded)
-    logort.logging("Se ejecutó el archivo en R...")
+    # #Se termina de ejecutar el archivo de R.
+    # run_r_script(downloaded)
+    # logort.logging("Se ejecutó el archivo en R...")
     
-    #Se ejecuta orthofinder sobre los archivos creados y relevantes.
-    logort.logging("Se ejecuta orthofinder...")
-    orthofinder(tree)
-    logort.logging("Se ejecutó correctamente orthofinder...")
+    # #Se ejecuta orthofinder sobre los archivos creados y relevantes.
+    # logort.logging("Se ejecuta orthofinder...")
+    # orthofinder(tree)
+    # logort.logging("Se ejecutó correctamente orthofinder...")
 
 if __name__ == "__main__":
     if "--url-list" not in sys.argv:
