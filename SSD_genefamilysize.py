@@ -228,22 +228,22 @@ def main(url_list, tree):
     downloaded = pasos_samtools(downloaded)
     logort.logging("Se terminó de aplicar samtools a los archivos renombrados.")
 
-    # # Función que aplica grep y awk a los archivos renombrados para obtener indices de genes relevantes.
-    # grep_and_awk(downloaded)
-    # logort.logging("Se terminó de aplicar grep y awk a los archivos...")
+    # Función que aplica grep y awk a los archivos renombrados para obtener indices de genes relevantes.
+    grep_and_awk(downloaded)
+    logort.logging("Se terminó de aplicar grep y awk a los archivos...")
 
-    # #Función que aplica grep y awk de nuevo para obtener indices relevantes.
-    # extract_indices(downloaded)
-    # logort.logging("Se obtuvieron los índices necesarios, continuando...")
+    #Función que aplica grep y awk de nuevo para obtener indices relevantes.
+    extract_indices(downloaded)
+    logort.logging("Se obtuvieron los índices necesarios, continuando...")
 
-    # #Se termina de ejecutar el archivo de R.
-    # run_r_script(downloaded)
-    # logort.logging("Se ejecutó el archivo en R...")
+    #Se termina de ejecutar el archivo de R.
+    run_r_script(downloaded)
+    logort.logging("Se ejecutó el archivo en R...")
     
-    # #Se ejecuta orthofinder sobre los archivos creados y relevantes.
-    # logort.logging("Se ejecuta orthofinder...")
-    # orthofinder(tree)
-    # logort.logging("Se ejecutó correctamente orthofinder...")
+    #Se ejecuta orthofinder sobre los archivos creados y relevantes.
+    logort.logging("Se ejecuta orthofinder...")
+    orthofinder(tree)
+    logort.logging("Se ejecutó correctamente orthofinder...")
 
 if __name__ == "__main__":
     if "--url-list" not in sys.argv:

@@ -5,9 +5,10 @@ This project encompasses a comprehensive pipeline designed to facilitate the cre
 ### Local
 Clone the repository to your machine and start using the project, the main function is located at "SSD_genefamilysize.py". Ensure the system has python>=3.9.x.
 
-The tools necessary for the pipeline to run smoothly are samtools, awk, grep, curl, gzip and the project Orthofinder. 
+The tools necessary for the pipeline to run smoothly are samtools, awk, grep, curl, gzip and the project Orthofinder(https://github.com/davidemms/OrthoFinder.git).
 
-NOTE:Using this installation method you might need to change the working directory for the R script to the full path or wherever you downloaded the project or where you are going to save the python files.
+NOTE:Using this installation method you might need to change the working directory for the R script to the full path or wherever you downloaded the project or where you are going to save the python files. You might need to change the path of the command that executes the orthofinder project this is in the line 208(if you want to use a specific .tre file) or line 210(if you don't want to use any specific .tre file).
+
 ### Docker
 Alternatively you can clone the repository, and use the Dockerfile attached to build an image and use the project inside that image.
 
