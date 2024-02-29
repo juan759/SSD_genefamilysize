@@ -14,24 +14,37 @@ Alternatively you can clone the repository, and use the Dockerfile attached to b
 
 For this you will need to first create an image with the docker file:
 
+```
 sudo docker build -t orthofinder
+```
 
 then after the image has been created over the dockerfile you can spawn an interactive tty shell with /bin/bash. This is possible  because the Docker image works on an Ubuntu Image:
 
+```
 sudo docker run –name Orthofind --interactive --tty orthofind /bin/bash
+```
 
 this will spawn a new shell and you will be able to find the files for the project in the /home/orthofinder repository.
 
 ## Usage
-Run the Python script. If any required flags or parameters are missing, the script will print the usage and examples. While running, the script will print the stage it currently is and the process it is currently running.
+Run the Python script. If any required flags or parameters are missing, the script will print the usage and examples. While running, the script will print the stage it currently is and the process it is currently running. The url list must be either a .csv file or a .txt file. Any other file extension can't be used and processed by the tool.
+
+### Url list by a TXT file
+If you are providing the list of URLs in a .txt file, it should only include the URLs for the specific .gz genome files from the NCBI database, with each URL on a separate line and no additional content. As an example, the genomes.txt is an example of how the txt file and it's content would look like.
+
+### Url list by a CSV file
+If you are providing the list of URLs in a .csv file, ensure that the file contains a column named 'NCBI Link', and that this column only includes entries for the specific .gz genome files from the NCBI database. Any other columns and entries will be ignored, as the tool does not require them. As an example, the genomes.csv is an example of how the txt file and it's content would look like.
 
 The script accepts two parameters, one optional and one required:
 
---url-list: A text file containing URLs, each separated by a newline, from which genomes will be downloaded from NCBI.
+--url-list: A text or csv file containing URLs for the NCBI genomes to be downloaded.
 
 --ortho-tree: A tree file (in the "tre" format) specifying the tree to be utilized in the processing.
 
 # Usage Examples:
+```
 python3 SSD_genefamilysize.py --url-list name.txt 
-
+```
+```
 python3 SSD_genefamilysize.py –url-list name.txt –ortho-three Mammalia_tree_130spp_plosOne_timetree_addedTips.tre
+```
