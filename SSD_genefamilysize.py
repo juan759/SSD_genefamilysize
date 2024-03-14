@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 
 import sys
 import subprocess
@@ -5,10 +6,12 @@ import urllib.request
 import os
 import logger as logort
 import cleaner as cl
+import csv
 
 def usage():
-    print("[+]Como usarlo: python3 Orthofinder_better.py --url-list <URL_LIST_FILE> --ortho-three <PATH_to_tree>")
+    print("[+]Como usarlo: python3 Orthofinder_better.py --format-list <csv o txt> --url-list <URL_LIST_FILE> --ortho-three <PATH_to_tree>")
     print("[+]--url-list <URL_LIST_FILE>.txt: Path a la lista de links https para obtener los genomas.")
+    print("[+]--format-list <csv o txt>: Formato del archivo dónde se encuentran las URL.")
     print("[+]--ortho-three <PATH_to_tree>.tre: Parametro opcional para procesar árbol ortológico.")
     sys.exit(1)
 
@@ -43,7 +46,6 @@ def check_awk():
     except subprocess.CalledProcessError:
         print("awk no está instalado")
 
-
 def check_dependencies():
     """
     Función que verifica la instalación de varias herramientas en el sistema.
@@ -56,8 +58,6 @@ def check_dependencies():
         check_dependency(tool)
     check_awk()
     logort.logging("Verificación de herramientas terminada iniciando descargas...")
-
-    
 
 def download_file(url):
     """
@@ -94,9 +94,34 @@ def corrije_download(downloaded):
         nombres.append(f"{renombre}.faa")
         os.rename(i,f"{renombre}.faa.gz")
         subprocess.run(f"gzip -d {renombre}.faa.gz",shell=True,executable="/bin/bash")
+    cl.clean_gz()
     return nombres
 
-    
+def process_csv(csv_file):
+    """
+    función equivalente a open(file,'r').readlines() pero para un archivo csv con una columna de urls.
+
+    Parameters
+    -----------------------
+    csv_file:file
+
+    Return 
+    ------------------------
+    csv_urls:list(str)
+    """
+    csv_urls = [] # Lista para almacenar los valores de la columna 'NCBI Link'
+    with open(csv_file) as csvf:
+        csv_reader = csv.DictReader(csvf)
+        for row in csv_reader:
+            try:
+                csv_urls.append(row['NCBI Link'])
+            except KeyError:
+                logort.logging("La columna 'NCBI Link' no existe en el archivo CSV.")
+                print("Revisar logs.")
+                exit(0)
+                
+    return csv_urls
+
 def pasos_samtools(downloaded):
     """
     Función que aplica samtools a una lista de archivos faa.
@@ -149,6 +174,27 @@ def grep_and_awk(downloaded):
         for k in downloaded:
             subprocess.run(f"awk 'ORS=NR%4?\" \":\"{escaped_n}\"' {k}_{i}.txt > {k}_df.txt", shell=True, executable="/bin/bash")
     cl.clean_step5()
+
+def check_format(index):
+    """
+    Función para revisar que el format del archivo con los links de entrada sea válido.
+
+    Parameters
+    ----------------------------
+    index:int
+
+    Return
+    ----------------------------
+    sys.argv[index]:int
+    
+    """
+    formatos = ["csv","txt"]
+    if sys.argv[index] in formatos:
+        return sys.argv[index]
+    else:
+        logort.logging("El archivo de donde se extraen los links no es un formato de entrada válido.")
+        print("Aquí")
+        usage()
 
 def extract_indices(downloaded):
     """
@@ -209,7 +255,7 @@ def orthofinder(tree):
     else:
         subprocess.run(f"python3 ./OrthoFinder_source/orthofinder.py -t 12 -f ./ -s {tree}", shell=True, executable="/bin/bash")
 
-def main(url_list, tree):
+def main(format_list,url_list, tree):
 
     #Mensaje de inicio al programa general.
     welcome_message()
@@ -217,7 +263,10 @@ def main(url_list, tree):
     check_dependencies()
 
     #Función que descarga los archivo faa de internet y los guarda.
-    download = [download_file(url.strip()) for url in open(url_list, 'r').readlines()]
+    if format_list=="txt":
+        download = [download_file(url.strip()) for url in open(url_list, 'r').readlines()]
+    else:
+        download = [download_file(url.strip()) for url in process_csv(url_list)]
     logort.logging("Descargados todos los archivos, continuando...")
 
     #Función que renombra los archivos descargados de internet, con nombres que el usuario quiera poner.
@@ -247,13 +296,22 @@ def main(url_list, tree):
 
 if __name__ == "__main__":
     if "--url-list" not in sys.argv:
+        print("[+]Falta parámetro --url-list")
+        print("-------------------------------------")
         usage()
     url_list_index = sys.argv.index("--url-list") + 1
     url_list = sys.argv[url_list_index]
+    if "--format-list" not in sys.argv:
+        print("[+]Falta parámetro --format-list")
+        print("-------------------------------------")
+        usage()
+    format_list_index = sys.argv.index("--format-list") + 1
+    format_list = check_format(format_list_index)
+
 
     tree_index = sys.argv.index("--ortho-three") + 1 if "--ortho-three" in sys.argv else None
     tree = sys.argv[tree_index] if tree_index is not None and tree_index + 1 < len(sys.argv) else None
     try:
-        main(url_list, tree)
+        main(format_list, url_list, tree)
     except Exception as e:
         logort.logging(e)

@@ -1,6 +1,13 @@
+#!/usr/bin/python3
+
 import sys
 import subprocess
 import os
+
+def clean_gz():
+    subprocess.run("rm *.gz", shell=True, executable="/bin/bash")
+    print("Removed gz(compressed) files.")
+
 
 def clean_step5():
     subprocess.run("rm *_1.txt", shell=True, executable="/bin/bash")
