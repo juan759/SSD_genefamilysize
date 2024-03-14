@@ -15,13 +15,17 @@ Alternatively you can clone the repository, and use the Dockerfile attached to b
 For this you will need to first create an image with the docker file:
 
 ```
-sudo docker build -t orthofinder
+sudo docker build . -t orthofind
 ```
 
 then after the image has been created over the dockerfile you can spawn an interactive tty shell with /bin/bash. This is possible  because the Docker image works on an Ubuntu Image:
 
 ```
+<<<<<<< HEAD
 sudo docker run --name Orthofind --interactive --tty orthofind /bin/bash
+=======
+sudo docker run –name orthofind --interactive --tty orthofind /bin/bash
+>>>>>>> 97ab7f3f0a60780531bdc2de3a6d1f8141e71c66
 ```
 
 this will spawn a new shell and you will be able to find the files for the project in the /home/orthofinder repository.
