@@ -16,5 +16,5 @@ def clean_step5():
     print("Removed unnecesary text files.")
 
 def clean_genomeID():
-    subprocess.run("rm genomes_index_geneID.txt", shell=True, executable="/bin/bash")
+    subprocess.run("rm genome_index_geneID.txt", shell=True, executable="/bin/bash")
     print("Removed genomes index.")

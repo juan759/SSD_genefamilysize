@@ -94,7 +94,6 @@ def corrije_download(downloaded):
         nombres.append(f"{renombre}.faa")
         os.rename(i,f"{renombre}.faa.gz")
         subprocess.run(f"gzip -d {renombre}.faa.gz",shell=True,executable="/bin/bash")
-    cl.clean_gz()
     return nombres
 
 def process_csv(csv_file):
@@ -251,9 +250,9 @@ def orthofinder(tree):
     subprocess.run("ulimit -n 20000", shell=True, executable="/bin/bash")
 
     if not tree:
-        subprocess.run("python3 ./OrthoFinder_source/orthofinder.py -t 12 -f ./", shell=True, executable="/bin/bash")
+        subprocess.run("python3 OrthoFinder/orthofinder.py -t 12 -f ./", shell=True, executable="/bin/bash")
     else:
-        subprocess.run(f"python3 ./OrthoFinder_source/orthofinder.py -t 12 -f ./ -s {tree}", shell=True, executable="/bin/bash")
+        subprocess.run(f"python3 OrthoFinder/orthofinder.py -t 12 -f ./ -s {tree}", shell=True, executable="/bin/bash")
 
 def main(format_list,url_list, tree):
 
