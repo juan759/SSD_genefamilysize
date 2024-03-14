@@ -26,6 +26,8 @@ RUN git clone https://github.com/davidemms/OrthoFinder.git
 
 #Guardando los archivos del proyecto Orthofinder en /home/orthofind  para que el usuario lo pueda usar.
 ADD 8.Script_LargestSecs_Allsppecies.R /home/orthofind/
-ADD orthofinder_better_optimized.py /home/orthofind/
-ADD logging_ortho.py /home/orthofind/
-ADD name.txt /home/orthofind
+ADD SSD_genefamilysize.py /home/orthofind/
+ADD logger.py /home/orthofind/
+ADD cleaner.py /home/orthofind/
+ADD genomes.txt /home/orthofind/
+ADD genomes.csv /home/orthofind/ 
