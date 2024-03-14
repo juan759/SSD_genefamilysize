@@ -19,8 +19,8 @@ RUN apt-get install vim -y
 
 #Creamos el directorio dondde se encontrará el proyecto de python.
 # Clone the GitHub project
-RUN mkdir /home/orthofind
-WORKDIR /home/orthofind
+RUN mkdir /home/orthofind/
+WORKDIR /home/orthofind/
 RUN git clone https://github.com/davidemms/OrthoFinder.git
 
 
