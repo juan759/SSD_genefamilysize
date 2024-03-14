@@ -10,7 +10,7 @@ FROM python:3.10.13
 #Instalamos todas las dependencias necesarias.
 RUN apt-get update
 RUN apt-get install -y r-base git
-RUN R -e "install.packages(c('plyr', 'dplyr', 'tydiverse'), repos='http://cran.rstudio.com/')"
+RUN R -e "install.packages(c('plyr', 'dplyr', 'tydiverse', 'data.table'), repos='http://cran.rstudio.com/')"
 RUN apt-get install samtools -y
 RUN apt-get install grep -y
 RUN apt-get install curl -y
