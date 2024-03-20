@@ -11,7 +11,6 @@ import csv
 def usage():
     print("[+]Como usarlo: python3 Orthofinder_better.py --format-list <csv o txt> --url-list <URL_LIST_FILE> --ortho-three <PATH_to_tree>")
     print("[+]--url-list <URL_LIST_FILE>.txt: Path a la lista de links https para obtener los genomas.")
-    print("[+]--format-list <csv o txt>: Formato del archivo dónde se encuentran las URL.")
     print("[+]--ortho-three <PATH_to_tree>.tre: Parametro opcional para procesar árbol ortológico.")
     sys.exit(1)
 
@@ -73,7 +72,7 @@ def download_file(url):
     logort.logging(f"Archivo descargado: {output_file}")
     return output_file
 
-def corrije_download(downloaded):
+def obtener_nombres_csv(csv_file):
     """
     Función para renombrar archivos.
 
@@ -87,13 +86,37 @@ def corrije_download(downloaded):
     downloaded: list(str)
     Lista de los archivos con los nombre nuevos obtenidos del usuario.
     """
+    csv_names = [] # Lista para almacenar los valores de la columna 'NCBI Link'
+    with open(csv_file) as csvf:
+        csv_reader = csv.DictReader(csvf)
+        for row in csv_reader:
+            try:
+                csv_names.append(row['Names'])
+            except KeyError:
+                logort.logging("La columna 'Names' no existe en el archivo CSV.")
+                print("Revisar logs.")
+                exit(0)
+    return csv_names
+
+def corrije_download(downloaded,nombres_correctos):
+    """
+    Función que renombra los archivos descargados de NCBI a nombres que el usuario requiera.
+
+    Parameters
+    --------------
+    downloaded: list(str)
+    Lista de archivos descargados, se obtienen del parametros en consola "--url-list".
+
+    nombres_correctos: list(str)
+    Lista de nombres con los que el usuario quiere renombrar los archivos descargados.
+    
+    """
     nombres = []
-    for i in downloaded:
-        print(f"¿Como quieres nombrar el archivo?{i}")
-        renombre = input("Escribe el nombre sin extensión:")
-        nombres.append(f"{renombre}.faa")
-        os.rename(i,f"{renombre}.faa.gz")
-        subprocess.run(f"gzip -d {renombre}.faa.gz",shell=True,executable="/bin/bash")
+    for i in range(len(downloaded)):
+        print(f"Renombrando archivo {downloaded[i]} a {nombres_correctos[i]}")
+        nombres.append(f"{nombres_correctos[i]}.faa")
+        os.rename(downloaded[i],f"{nombres_correctos[i]}.faa.gz")
+        subprocess.run(f"gzip -d {nombres_correctos[i]}.faa.gz",shell=True,executable="/bin/bash")
     return nombres
 
 def process_csv(csv_file):
@@ -254,7 +277,7 @@ def orthofinder(tree):
     else:
         subprocess.run(f"python3 OrthoFinder/orthofinder.py -t 12 -f ./ -s {tree}", shell=True, executable="/bin/bash")
 
-def main(format_list,url_list, tree):
+def main(url_list, tree):
 
     #Mensaje de inicio al programa general.
     welcome_message()
@@ -262,14 +285,11 @@ def main(format_list,url_list, tree):
     check_dependencies()
 
     #Función que descarga los archivo faa de internet y los guarda.
-    if format_list=="txt":
-        download = [download_file(url.strip()) for url in open(url_list, 'r').readlines()]
-    else:
-        download = [download_file(url.strip()) for url in process_csv(url_list)]
+    download = [download_file(url.strip()) for url in process_csv(url_list)]
     logort.logging("Descargados todos los archivos, continuando...")
 
     #Función que renombra los archivos descargados de internet, con nombres que el usuario quiera poner.
-    downloaded = corrije_download(download)
+    downloaded = corrije_download(download,obtener_nombres_csv(url_list))
     logort.logging("Modificados todos los archivos con los nombres que el usuario quiera, continuando...")
 
     #Función que aplica samtools a los archivos con nombres distintos para procesar su información.
@@ -288,10 +308,10 @@ def main(format_list,url_list, tree):
     run_r_script(downloaded)
     logort.logging("Se ejecutó el archivo en R...")
     
-    #Se ejecuta orthofinder sobre los archivos creados y relevantes.
-    logort.logging("Se ejecuta orthofinder...")
-    orthofinder(tree)
-    logort.logging("Se ejecutó correctamente orthofinder...")
+    # #Se ejecuta orthofinder sobre los archivos creados y relevantes.
+    # logort.logging("Se ejecuta orthofinder...")
+    # orthofinder(tree)
+    # logort.logging("Se ejecutó correctamente orthofinder...")
 
 if __name__ == "__main__":
     if "--url-list" not in sys.argv:
@@ -300,17 +320,10 @@ if __name__ == "__main__":
         usage()
     url_list_index = sys.argv.index("--url-list") + 1
     url_list = sys.argv[url_list_index]
-    if "--format-list" not in sys.argv:
-        print("[+]Falta parámetro --format-list")
-        print("-------------------------------------")
-        usage()
-    format_list_index = sys.argv.index("--format-list") + 1
-    format_list = check_format(format_list_index)
-
 
     tree_index = sys.argv.index("--ortho-three") + 1 if "--ortho-three" in sys.argv else None
     tree = sys.argv[tree_index] if tree_index is not None and tree_index + 1 < len(sys.argv) else None
     try:
-        main(format_list, url_list, tree)
+        main(url_list, tree)
     except Exception as e:
         logort.logging(e)

@@ -21,41 +21,26 @@ sudo docker build . -t orthofind
 then after the image has been created over the dockerfile you can spawn an interactive tty shell with /bin/bash. This is possible  because the Docker image works on an Ubuntu Image:
 
 ```
-<<<<<<< HEAD
-sudo docker run --name Orthofind --interactive --tty orthofind /bin/bash
-=======
-sudo docker run –name orthofind --interactive --tty orthofind /bin/bash
->>>>>>> 97ab7f3f0a60780531bdc2de3a6d1f8141e71c66
+sudo docker run --name orthofind --interactive --tty orthofind /bin/bash
 ```
 
-this will spawn a new shell and you will be able to find the files for the project in the /home/orthofinder repository.
+this will spawn a new shell and you will be able to find the files for the project in the "/home/orthofind" directory.
 
 ## Usage
-Run the Python script. If any required flags or parameters are missing, the script will print the usage and examples. While running, the script will print the stage it currently is and the process it is currently running. The url list must be either a '.csv' file or a '.txt' file. Any other file extension can't be used and processed by the tool.
-
-### Url list by a TXT file
-If you are providing the list of URLs in a .txt file, it should only include the URLs for the specific .gz genome files from the NCBI database, with each URL on a separate line and no additional content. As an example, the genomes.txt is an example of how the txt file and it's content would look like.
+Run the Python script. If any required flags or parameters are missing, the script will print the usage and examples. While running, the script will print the stage it currently is and the process it is currently running. The url list must be a '.csv' file. Any other file extension can't be used and processed by the tool.
 
 ### Url list by a CSV file
-If you are providing the list of URLs in a .csv file, ensure that the file contains a column named 'NCBI Link', and that this column only includes entries for the specific .gz genome files from the NCBI database. Any other columns and entries will be ignored, as the tool does not require them. As an example, the genomes.csv is an example of how the csv file and it's content would look like.
+The .csv file must contain the columns "Names" and "NCBI Link", and this last column only includes the url's for the specific ".gz" genome files from the NCBI database. The "Names" column will contain the name of the species the ".gz" belongs to. Any other column will be ignored. An example can be found in the "genomes.csv" file.
 
-The script accepts three parameters, one optional and two required:
+The script accepts two parameters, one optional and one required:
 
---url-list: A text or csv file containing URLs for the NCBI genomes to be downloaded.
+--url-list(Required): A text or csv file containing URLs for the NCBI genomes to be downloaded.
 
---format-list: A string indicating the type of file that will contain the NCBI links.
-
---ortho-tree: A tree file (in the "tre" format) specifying the tree to be utilized in the processing.
+--ortho-tree(Optional): A tree file (in the "tre" format) specifying the tree to be utilized in the processing.
 
 # Usage Examples:
 ```
-python3 SSD_genefamilysize.py --url-list genomes.txt --format-list txt 
-```
-```
-python3 SSD_genefamilysize.py --url-list genomes.csv --format-list csv 
-```
-```
-python3 SSD_genefamilysize.py --url-list genomes.txt --format-list txt --ortho-three Mammalia_tree_130spp_plosOne_timetree_addedTips.tre
+python3 SSD_genefamilysize.py --url-list genomes.csv
 ```
 ```
 python3 SSD_genefamilysize.py --url-list genomes.csv --format-list csv --ortho-three Mammalia_tree_130spp_plosOne_timetree_addedTips.tre
