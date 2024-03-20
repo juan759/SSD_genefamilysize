@@ -308,10 +308,10 @@ def main(url_list, tree):
     run_r_script(downloaded)
     logort.logging("Se ejecutó el archivo en R...")
     
-    # #Se ejecuta orthofinder sobre los archivos creados y relevantes.
-    # logort.logging("Se ejecuta orthofinder...")
-    # orthofinder(tree)
-    # logort.logging("Se ejecutó correctamente orthofinder...")
+    #Se ejecuta orthofinder sobre los archivos creados y relevantes.
+    logort.logging("Se ejecuta orthofinder...")
+    orthofinder(tree)
+    logort.logging("Se ejecutó correctamente orthofinder...")
 
 if __name__ == "__main__":
     if "--url-list" not in sys.argv:

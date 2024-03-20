@@ -5,7 +5,7 @@ library(tidyverse)
 library(plyr)
 library(dplyr)
 
-setwd('/home/tolot/Documentos/Servicio_Social/proyecto_github/SSD_genefamilysize')
+setwd('/home/orthofind/')
 
 rm(list = ls())
 
